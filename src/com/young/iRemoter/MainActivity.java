@@ -35,6 +35,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
     private String ruffIrUrl = getUrl(ruffIp, ruffPort, ruffIrPath);
     private String irDevice = "AC";
     private String irCode = "01000123";
+    private ArrayList<Integer> buttonIds = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
         button1.setOnLongClickListener(this);
-        refreshButtonName(R.id.button1);
+        buttonIds.add(R.id.button1);
+        refreshButtonName(buttonIds);
     }
 
     @Override
@@ -84,15 +86,18 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         editor.commit();
     }
 
-    private void refreshButtonName(int buttonId) {
-        Button button = (Button)findViewById(buttonId);
-        SharedPreferences sp = getSharedPreferences("button_names", MODE_PRIVATE);
-        String buttonNewName = sp.getString(String.valueOf(buttonId), "INTACT");
-        if (buttonNewName != "INTACT") {
-            button.setText(buttonNewName);
-            Log.v(TAG, "button " + buttonId + " use new name " + buttonNewName);
-        } else {
-            Log.v(TAG, "button " + buttonId + " keep name intact");
+    private void refreshButtonName(ArrayList<Integer> buttonIds) {
+        for (int i = 0; i < buttonIds.size(); i++) {
+            int buttonId = buttonIds.get(i);
+            Button button = (Button)findViewById(buttonId);
+            SharedPreferences sp = getSharedPreferences("button_names", MODE_PRIVATE);
+            String buttonNewName = sp.getString(String.valueOf(buttonId), "INTACT");
+            if (buttonNewName != "INTACT") {
+                button.setText(buttonNewName);
+                Log.v(TAG, "button " + buttonId + " use new name " + buttonNewName);
+            } else {
+                Log.v(TAG, "button " + buttonId + " keep name intact");
+            }
         }
     }
 
