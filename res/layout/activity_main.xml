@@ -7,9 +7,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:orientation="vertical" >
 
-    <TextView
+    <Button
+        android:id="@+id/button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/textview" />
+        android:text="@string/button1" />
 
 </LinearLayout>
