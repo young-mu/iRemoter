@@ -19,7 +19,9 @@ else
     echo "3. build APK ..."
     ant clean 1> /dev/null
     ant debug 1> /dev/null
-    echo "4. install APK ..."
+    echo "4. uninstall APK ..."
+    adb uninstall com.young.iRemoter 1> /dev/null
+    echo "5. install APK ..."
     echo "----------"
     adb devices | grep -w "device" 1> /dev/null
     if [[ $? -eq 0 ]]; then

@@ -2,5 +2,7 @@
     <!-- AndroidManifest.xml -->
     <string name="app_name">iRemoter</string>
     <!-- res/layout/activity_main.xml -->
-    <string name="button1">connect</string>
+    <string name="button1">button1</string>
+    <string name="button2">button2</string>
+    <string name="button3">button3</string>
 </resources>
