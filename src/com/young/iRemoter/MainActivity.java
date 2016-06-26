@@ -23,6 +23,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 
 public class MainActivity extends Activity implements OnClickListener, OnLongClickListener {
     private static final String TAG = "iRemoter";
@@ -42,6 +44,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
         button1.setOnLongClickListener(this);
+        refreshButtonName(R.id.button1);
     }
 
     @Override
@@ -61,12 +64,36 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
     public boolean onLongClick(View view) {
         switch (view.getId()) {
         case R.id.button1:
-            Log.i(TAG, "long press");
+            renameButton(R.id.button1);
             break;
         default:
             break;
         }
         return true;
+    }
+
+    private void renameButton(int buttonId) {
+        Button button = (Button)findViewById(buttonId);
+        String buttonNewName = "haha";
+        Log.v(TAG, "button " + buttonId + " changes name as " + buttonNewName);
+        button.setText(buttonNewName);
+
+        SharedPreferences sp = getSharedPreferences("button_names", MODE_PRIVATE);
+        Editor editor = sp.edit();
+        editor.putString(String.valueOf(buttonId), buttonNewName);
+        editor.commit();
+    }
+
+    private void refreshButtonName(int buttonId) {
+        Button button = (Button)findViewById(buttonId);
+        SharedPreferences sp = getSharedPreferences("button_names", MODE_PRIVATE);
+        String buttonNewName = sp.getString(String.valueOf(buttonId), "INTACT");
+        if (buttonNewName != "INTACT") {
+            button.setText(buttonNewName);
+            Log.v(TAG, "button " + buttonId + " use new name " + buttonNewName);
+        } else {
+            Log.v(TAG, "button " + buttonId + " keep name intact");
+        }
     }
 
     private String getUrl(String ip, String port, String path) {
