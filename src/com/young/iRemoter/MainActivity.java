@@ -21,9 +21,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.Button;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends Activity implements OnClickListener, OnLongClickListener {
     private static final String TAG = "iRemoter";
     private Button button1;
     private String ruffIp = "http://192.168.1.105";
@@ -40,6 +41,7 @@ public class MainActivity extends Activity implements OnClickListener {
         Log.i(TAG, "enter MainActivity");
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
+        button1.setOnLongClickListener(this);
     }
 
     @Override
@@ -53,6 +55,18 @@ public class MainActivity extends Activity implements OnClickListener {
         default:
             break;
         }
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        switch (view.getId()) {
+        case R.id.button1:
+            Log.i(TAG, "long press");
+            break;
+        default:
+            break;
+        }
+        return true;
     }
 
     private String getUrl(String ip, String port, String path) {
