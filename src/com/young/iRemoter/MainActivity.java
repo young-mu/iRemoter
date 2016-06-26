@@ -171,9 +171,11 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
                 HttpResponse httpResponse = httpClient.execute(httpPost);
                 int statusCode = httpResponse.getStatusLine().getStatusCode();
                 if (statusCode == 200) {
+                    Log.i(TAG, "request SUCCESS");
                     showResponseEntity(httpResponse);
                 }
             } catch (Exception e) {
+                Log.i(TAG, "request FAILED");
                 e.printStackTrace();
             }
         }
