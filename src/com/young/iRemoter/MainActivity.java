@@ -29,10 +29,12 @@ import android.content.SharedPreferences.Editor;
 public class MainActivity extends Activity implements OnClickListener, OnLongClickListener {
     private static final String TAG = "iRemoter";
 
-    private String ruffIp = "http://192.168.1.105";
+    private String ruffIp = "http://192.168.1.110";
     private String ruffPort = "3000";
-    private String ruffIrPath = "ir-post";
-    private String ruffIrUrl = getUrl(ruffIp, ruffPort, ruffIrPath);
+    private String ruffIrRecvPath = "ir-recv";
+    private String ruffIrSendPath = "ir-send";
+    private String ruffIrRecvUrl = getUrl(ruffIp, ruffPort, ruffIrRecvPath);
+    private String ruffIrSendUrl = getUrl(ruffIp, ruffPort, ruffIrSendPath);
 
     private Button button1;
     private Button button2;
@@ -76,19 +78,23 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
     public void onClick(View view) {
         switch (view.getId()) {
         case R.id.button1:
-            Log.i(TAG, "request to " + ruffIrUrl);
-            HttpPostThread httpPostThread1 = new HttpPostThread(irDevice1, irCode1);
+            Log.i(TAG, "request to " + ruffIrRecvUrl);
+            HttpPostThread httpPostThread1 = new HttpPostThread("recv", R.id.button1);
             httpPostThread1.start();
             break;
         case R.id.button2:
-            Log.i(TAG, "request to " + ruffIrUrl);
-            HttpPostThread httpPostThread2 = new HttpPostThread(irDevice2, irCode2);
-            httpPostThread2.start();
+            Log.i(TAG, "request to " + ruffIrSendUrl);
+            String irCode = getIrCode(R.id.button1);
+            if (irCode != "UNDEFINED") {
+                HttpPostThread httpPostThread2 = new HttpPostThread("send", R.id.button1, irCode);
+                httpPostThread2.start();
+            }
             break;
         case R.id.button3:
-            Log.i(TAG, "request to " + ruffIrUrl);
-            HttpPostThread httpPostThread3 = new HttpPostThread(irDevice3, irCode3);
-            httpPostThread3.start();
+            Log.i(TAG, "button3");
+//            Log.i(TAG, "request to " + ruffIrUrl);
+//            HttpPostThread httpPostThread3 = new HttpPostThread(irDevice3, R.id.button3, irCode3);
+//            httpPostThread3.start();
             break;
         default:
             break;
@@ -140,52 +146,82 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
         }
     }
 
+    private void putIrCode(int buttonId, String irCode) {
+        SharedPreferences sp = getSharedPreferences("button_ircodes", MODE_PRIVATE);
+        Editor editor = sp.edit();
+        editor.putString(String.valueOf(buttonId), irCode);
+        editor.commit();
+    }
+
+    private String getIrCode(int buttonId) {
+        SharedPreferences sp = getSharedPreferences("button_ircodes", MODE_PRIVATE);
+        String irCode = sp.getString(String.valueOf(buttonId), "UNDEFINED");
+        Log.v(TAG, "button " + buttonId + " irCode " + irCode);
+        return irCode;
+    }
+
     private String getUrl(String ip, String port, String path) {
         return ip + ':' + port + '/' + path;
     }
 
     class HttpPostThread extends Thread {
-        String irDevice;
+        String postType;
+        int buttonId;
         String irCode;
 
-        public HttpPostThread(String irDevice, String irCode) {
-            this.irDevice = irDevice;
+        public HttpPostThread(String postType, int buttonId) {
+            this.postType = postType;
+            this.buttonId = buttonId;
+            this.irCode = "none";
+        }
+
+        public HttpPostThread(String postType, int buttonId, String irCode) {
+            this.postType = postType;
+            this.buttonId = buttonId;
             this.irCode = irCode;
         }
 
         @Override
         public void run() {
-
-            NameValuePair id = new BasicNameValuePair("irDevice", this.irDevice);
-            NameValuePair value = new BasicNameValuePair("irCode", this.irCode);
+            NameValuePair irCode = new BasicNameValuePair("irCode", this.irCode);
             List<NameValuePair> pairList = new ArrayList<NameValuePair>();
-            pairList.add(id);
-            pairList.add(value);
+            pairList.add(irCode);
 
             HttpClient httpClient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(ruffIrUrl);
 
-            try {
-                HttpEntity requestHttpEntity = new UrlEncodedFormEntity(pairList);
-                httpPost.setEntity(requestHttpEntity);
-                HttpResponse httpResponse = httpClient.execute(httpPost);
-                int statusCode = httpResponse.getStatusLine().getStatusCode();
-                if (statusCode == 200) {
-                    Log.i(TAG, "request SUCCESS");
-                    showResponseEntity(httpResponse);
+            if (this.postType == "recv" || this.postType == "send") {
+                HttpPost httpPost = new HttpPost(this.postType == "recv" ? ruffIrRecvUrl : ruffIrSendUrl);
+
+                try {
+                    HttpEntity requestHttpEntity = new UrlEncodedFormEntity(pairList);
+                    httpPost.setEntity(requestHttpEntity);
+                    HttpResponse httpResponse = httpClient.execute(httpPost);
+                    int statusCode = httpResponse.getStatusLine().getStatusCode();
+                    if (statusCode == 200) {
+                        Log.i(TAG, "request SUCCESS");
+                        String recvData = getResponseEntity(httpResponse);
+                        if (this.postType == "recv") {
+                            putIrCode(this.buttonId, recvData);
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.i(TAG, "request FAILED");
+                    e.printStackTrace();
                 }
-            } catch (Exception e) {
-                Log.i(TAG, "request FAILED");
-                e.printStackTrace();
+
+            } else {
+                Log.e(TAG, "invalid postType " + this.postType);
             }
         }
     }
 
-    private void showResponseEntity(HttpResponse httpResponse) {
+    private String getResponseEntity(HttpResponse httpResponse) {
         if (httpResponse == null) {
-            return;
+            return null;
         }
+
         HttpEntity httpEntity = httpResponse.getEntity();
+
         try {
             InputStream inputStream = httpEntity.getContent();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -195,8 +231,10 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
                 data += line;
             }
             Log.i(TAG, "from server > " + data);
+            return data;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 }

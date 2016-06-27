@@ -1,0 +1,13 @@
+{
+    "name": "ir-server",
+    "version": "0.1.0",
+    "description": "ir server controlled by Android",
+    "author": "Young",
+    "main": "src/index.js",
+    "ruff": {
+        "dependencies": {
+            "ruff-v1-infrared-receiver": "^0.3.1",
+            "ruff-v1-infrared-sender": "^0.3.1"
+        }
+    }
+}

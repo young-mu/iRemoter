@@ -1,0 +1,26 @@
+{
+    "devices": [
+        {
+            "id": "irr-01",
+            "model": "IRR-01",
+            "driver": "ruff-v1-infrared-receiver",
+            "inputs": {
+                "gpio": {
+                    "type": "gpio",
+                    "reserve": "gpio-11/gpio"
+                }
+            }
+        },
+        {
+            "id": "irt-01",
+            "model": "IRT-01",
+            "driver": "ruff-v1-infrared-sender",
+            "inputs": {
+                "gpio": {
+                    "type": "gpio",
+                    "reserve": "gpio-12/gpio"
+                }
+            }
+        }
+    ]
+}
