@@ -38,15 +38,7 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
     private Button button1;
     private Button button2;
-    private Button button3;
     private ArrayList<Integer> buttonIds = new ArrayList<Integer>();
-
-    private String irDevice1 = "AC";
-    private String irCode1 = "01000001";
-    private String irDevice2 = "TV";
-    private String irCode2 = "01000002";
-    private String irDevice3 = "STB";
-    private String irCode3 = "01000003";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +49,15 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
 
         button1 = (Button)findViewById(R.id.button1);
         button2 = (Button)findViewById(R.id.button2);
-        button3 = (Button)findViewById(R.id.button3);
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
-        button3.setOnClickListener(this);
 
         button1.setOnLongClickListener(this);
         button2.setOnLongClickListener(this);
-        button3.setOnLongClickListener(this);
 
         buttonIds.add(R.id.button1);
         buttonIds.add(R.id.button2);
-        buttonIds.add(R.id.button3);
 
         refreshButtonName(buttonIds);
     }
@@ -90,12 +78,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
                 httpPostThread2.start();
             }
             break;
-        case R.id.button3:
-            Log.i(TAG, "button3");
-//            Log.i(TAG, "request to " + ruffIrUrl);
-//            HttpPostThread httpPostThread3 = new HttpPostThread(irDevice3, R.id.button3, irCode3);
-//            httpPostThread3.start();
-            break;
         default:
             break;
         }
@@ -109,9 +91,6 @@ public class MainActivity extends Activity implements OnClickListener, OnLongCli
             break;
         case R.id.button2:
             renameButton(R.id.button2);
-            break;
-        case R.id.button3:
-            renameButton(R.id.button3);
             break;
         default:
             break;
