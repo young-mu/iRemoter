@@ -13,6 +13,20 @@ $.ready(function (error) {
 
     $('#led-r').turnOn();
 
+    var lightGreenLED = function() {
+        $('#led-g').turnOn();
+        setTimeout(function() {
+            $('#led-g').turnOff();
+        }, 100);
+    };
+
+    var lightBlueLED = function() {
+        $('#led-b').turnOn();
+        setTimeout(function() {
+            $('#led-b').turnOff();
+        }, 100);
+    };
+
     http.createServer(function(req, res) {
         if (req.method == 'POST') {
             var addr = req.connection.remoteAddress;
@@ -24,6 +38,7 @@ $.ready(function (error) {
                     $('#irr-01').on('data', function(data) {
                         res.writeHead(200, {'content-type': 'text/plain'});
                         res.end(data.toString());
+                        lightGreenLED();
                     });
                 });
             }
@@ -38,6 +53,7 @@ $.ready(function (error) {
                         } else {
                             res.writeHead(200, {'content-type': 'text/plain'});
                             res.end("irCode send success");
+                            lightBlueLED();
                         }
                     });
                 });

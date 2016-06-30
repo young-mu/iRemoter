@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private static final String spNewButtonNames = "button_new_names";
     private static final String spButtonIrCodes = "button_ircodes";
 
-    private String ruffIp = "http://192.168.1.109";
+    private String ruffIp = "http://192.168.1.110";
     private String ruffPort = "3000";
     private String ruffIrRecvPath = "ir-recv";
     private String ruffIrSendPath = "ir-send";
