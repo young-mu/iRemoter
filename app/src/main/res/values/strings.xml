@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">iRemoter</string>
+    <string name="settings_start_conf">开始配置</string>
+    <string name="settings_end_conf">结束配置</string>
+    <string name="settings_clean_conf">清除配置</string>
+    <string name="settings_start_rename">开始命名</string>
+    <string name="settings_end_rename">结束命名</string>
+    <string name="settings_clean_rename">清除命名</string>
+    <string name="button1">button 1</string>
+    <string name="button2">button 2</string>
+    <string name="button3">button 3</string>
+    <string name="button4">button 4</string>
+    <string name="button5">button 5</string>
+    <string name="button6">button 6</string>
+    <string name="button7">button 7</string>
+    <string name="button8">button 8</string>
+    <string name="button9">button 9</string>
+    <string name="button10">button 10</string>
+</resources>

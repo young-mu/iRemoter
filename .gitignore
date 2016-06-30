@@ -1,8 +1,1 @@
-bin/
-gen/
-obj/
-libs/
-build.xml
-local.properties
-project.properties
-proguard-project.txt
+build/
