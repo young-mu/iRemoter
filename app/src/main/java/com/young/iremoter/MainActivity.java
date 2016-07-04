@@ -38,12 +38,12 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     private static final String TAG = "iRemoter";
-    private static final int buttonNum = 10;
+    private static final int buttonNum = 6;
     private static final String spInitButtonNames = "button_init_names";
     private static final String spNewButtonNames = "button_new_names";
     private static final String spButtonIrCodes = "button_ircodes";
 
-    private String ruffIp = "http://192.168.1.110";
+    private String ruffIp = "http://192.168.1.101";
     private String ruffPort = "3000";
     private String ruffIrRecvPath = "ir-recv";
     private String ruffIrSendPath = "ir-send";
@@ -83,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         buttonIds.add(R.id.button4);
         buttonIds.add(R.id.button5);
         buttonIds.add(R.id.button6);
-        buttonIds.add(R.id.button7);
-        buttonIds.add(R.id.button8);
-        buttonIds.add(R.id.button9);
-        buttonIds.add(R.id.button10);
         assert(buttonIds.size() == buttonNum);
 
         for (int i = 0; i < buttonIds.size(); i++) {
